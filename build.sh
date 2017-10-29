@@ -1,9 +1,12 @@
 include=-I/usr/local/include
-binary=unnamed
-source=src/main.c
 libs=-L/usr/local/lib
+binary=unnamed
+source="src/glfw_callbacks.c src/main.c"
 link_opengl=-lGL
 link_glfw="-lglfw3 -lrt -lm -ldl -lX11 -lpthread -lxcb -lXau -lXdmcp"
+link_glew=-lGLEW
 
-gcc $include -o $binary $source $libs $link_opengl $link_glfw
+gcc $source -o $binary $include $libs \
+  -Wl,-Bstatic $link_glew \
+  -Wl,-Bdynamic $link_opengl $link_glfw
 

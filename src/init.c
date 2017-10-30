@@ -16,7 +16,7 @@ GLFWwindow *init(void)
     int glfw_major, glfw_minor, glfw_revision;
     GLFWwindow *window;
 
-    glfwSetErrorCallback(glfw_error_callback);
+    glfwSetErrorCallback(glfw_callback_error);
 
     if (glfwInit() != GLFW_TRUE)
     {
@@ -51,7 +51,7 @@ GLFWwindow *init(void)
 
     glfwSwapInterval(1);
 
-    glfwSetKeyCallback(window, glfw_key_callback);
+    glfwSetKeyCallback(window, glfw_callback_key);
 
     return window;
 }

@@ -5,30 +5,8 @@
 #include <errno.h>
 #include <string.h>
 
-char *loader_load_file(const char *path, FILE *file);
-
-char *loader_load_filepath(const char *path)
-{
-    FILE *file;
-    char *file_content;
-    int error_number;
-
-    file = fopen(path, "r");
-    if (file == NULL)
-    {
-        error_number = errno;
-        fprintf(stderr, "Can not open file '%s'. %i: %s\n", path, error_number, strerror(error_number));
-        return NULL;
-    }
-
-    file_content = loader_load_file(path, file);
-
-    fclose(file);
-
-    return file_content;
-}
-
-char *loader_load_file(const char *path, FILE *file)
+// Load contents of file into memory as a single string, path argument is used just for printing error messages
+char *_loader_load_file(const char *path, FILE *file)
 {
     int error_number;
     char *file_content;
@@ -66,6 +44,28 @@ char *loader_load_file(const char *path, FILE *file)
         free(file_content);
         return NULL;
     }
+
+    return file_content;
+}
+
+// Load contents of file into memory as single string
+char *loader_load_filepath(const char *path)
+{
+    FILE *file;
+    char *file_content;
+    int error_number;
+
+    file = fopen(path, "r");
+    if (file == NULL)
+    {
+        error_number = errno;
+        fprintf(stderr, "Can not open file '%s'. %i: %s\n", path, error_number, strerror(error_number));
+        return NULL;
+    }
+
+    file_content = _loader_load_file(path, file);
+
+    fclose(file);
 
     return file_content;
 }

@@ -56,4 +56,3 @@ GLFWwindow *init(void)
     return window;
 }
 
-

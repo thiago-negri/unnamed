@@ -25,7 +25,9 @@ GLFWwindow *init(void)
     }
 
     glfwGetVersion(&glfw_major, &glfw_minor, &glfw_revision);
-    fprintf(stdout, "GLFW %i.%i.%i (compiled with %i.%i.%i)\n", glfw_major, glfw_minor, glfw_revision, GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
+    fprintf(stdout, "GLFW %i.%i.%i (compiled with %i.%i.%i)\n", 
+                    glfw_major, glfw_minor, glfw_revision, 
+                    GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
 
     window = glfwCreateWindow(width, height, title, NULL, NULL);
     if (window == NULL)
@@ -42,7 +44,8 @@ GLFWwindow *init(void)
     glew_init_result = glewInit();
     if (glew_init_result != GLEW_OK)
     {
-        fprintf(stderr, "Could not initialize GLEW. %s\n", glewGetString(glew_init_result));
+        fprintf(stderr, "Could not initialize GLEW. %s\n", 
+                        glewGetString(glew_init_result));
         glfwTerminate();
         return NULL;
     }

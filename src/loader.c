@@ -16,7 +16,8 @@ char *_loader_load_file(const char *path, FILE *file)
     if (fseek(file, 0, SEEK_END) != 0)
     {
         error_number = errno;
-        fprintf(stderr, "Can not reach end of file '%s'. %i: %s\n", path, error_number, strerror(error_number));
+        fprintf(stderr, "Can not reach end of file '%s'. %i: %s\n", 
+                        path, error_number, strerror(error_number));
         return NULL;
     }
 
@@ -25,7 +26,8 @@ char *_loader_load_file(const char *path, FILE *file)
     if (fseek(file, 0, SEEK_SET) != 0)
     {
         error_number = errno;
-        fprintf(stderr, "Can not reach start of file '%s'. %i: %s\n", path, error_number, strerror(error_number));
+        fprintf(stderr, "Can not reach start of file '%s'. %i: %s\n", 
+                        path, error_number, strerror(error_number));
         return NULL;
     }
 
@@ -33,14 +35,16 @@ char *_loader_load_file(const char *path, FILE *file)
     if (file_content == NULL)
     {
         error_number = errno;
-        fprintf(stderr, "Can not allocate memory to read file '%s' with size %li. %i: %s\n", path, file_size, error_number, strerror(error_number));
+        fprintf(stderr, "Can not allocate memory to read file '%s' with size %li. %i: %s\n", 
+                        path, file_size, error_number, strerror(error_number));
         return NULL;
     }
 
     bytes_read = fread(file_content, file_size, 1, file);
     if (bytes_read != 1)
     {
-        fprintf(stderr, "Bytes read from file '%s' is not equals to its size (%li != %li).\n", path, bytes_read, file_size);
+        fprintf(stderr, "Bytes read from file '%s' is not equals to its size (%li != %li).\n", 
+                        path, bytes_read, file_size);
         free(file_content);
         return NULL;
     }
@@ -59,7 +63,8 @@ char *loader_load_filepath(const char *path)
     if (file == NULL)
     {
         error_number = errno;
-        fprintf(stderr, "Can not open file '%s'. %i: %s\n", path, error_number, strerror(error_number));
+        fprintf(stderr, "Can not open file '%s'. %i: %s\n", 
+                        path, error_number, strerror(error_number));
         return NULL;
     }
 

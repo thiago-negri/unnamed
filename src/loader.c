@@ -11,9 +11,9 @@ char *_loader_load_file(const char *path, FILE *file)
     int error_number;
     char *file_content;
     long file_size;
-    size_t bytes_read;
+    size_t elements_read;
 
-    if (fseek(file, 0, SEEK_END) != 0)
+    if (fseek(file, 0L, SEEK_END) != 0)
     {
         error_number = errno;
         fprintf(stderr, "Can not reach end of file '%s'. %i: %s\n", 
@@ -22,8 +22,15 @@ char *_loader_load_file(const char *path, FILE *file)
     }
 
     file_size = ftell(file);
+    if (file_size < 0L)
+    {
+        error_number = errno;
+        fprintf(stderr, "Can not tell file size '%s'. %i: %s\n",
+                        path, error_number, strerror(error_number));
+        return NULL;
+    }
 
-    if (fseek(file, 0, SEEK_SET) != 0)
+    if (fseek(file, 0L, SEEK_SET) != 0)
     {
         error_number = errno;
         fprintf(stderr, "Can not reach start of file '%s'. %i: %s\n", 
@@ -40,11 +47,11 @@ char *_loader_load_file(const char *path, FILE *file)
         return NULL;
     }
 
-    bytes_read = fread(file_content, file_size, 1, file);
-    if (bytes_read != 1)
+    elements_read = fread(file_content, file_size, 1, file);
+    if (elements_read != 1)
     {
-        fprintf(stderr, "Bytes read from file '%s' is not equals to its size (%li != %li).\n", 
-                        path, bytes_read, file_size);
+        fprintf(stderr, "Elements read from file '%s' is not equals to 1. Elements read: %li, file size: %li.\n",
+                        path, elements_read, file_size);
         free(file_content);
         return NULL;
     }
@@ -58,6 +65,7 @@ char *loader_load_filepath(const char *path)
     FILE *file;
     char *file_content;
     int error_number;
+    int close_status;
 
     file = fopen(path, "r");
     if (file == NULL)
@@ -70,7 +78,13 @@ char *loader_load_filepath(const char *path)
 
     file_content = _loader_load_file(path, file);
 
-    fclose(file);
+    close_status = fclose(file);
+    if (close_status != 0)
+    {
+        error_number = errno;
+        fprintf(stderr, "Can not close file '%s' (ignoring). %i: %s\n",
+                        path, error_number, strerror(error_number));
+    }
 
     return file_content;
 }

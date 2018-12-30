@@ -59,6 +59,9 @@ char* _loader_load_file(char const* path, FILE* file)
         return NULL;
     }
 
+    // Make sure string is null terminated.
+    file_content[elements_read] = 0;
+
     return file_content;
 }
 

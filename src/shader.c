@@ -11,10 +11,10 @@ char const* _shader_type_str(GLenum shader_type)
 {
     switch (shader_type) {
         case GL_VERTEX_SHADER:
-			return "vertex";
+            return "vertex";
 
         case GL_FRAGMENT_SHADER:
-			return "fragment";
+            return "fragment";
     }
     fprintf(stderr, "Unknown shader type used at _shader_type_str: %i\n", shader_type);
     return "unknown";
@@ -24,11 +24,11 @@ char const* _shader_type_str(GLenum shader_type)
 GLuint _shader_create_from_filepath(GLenum shader_type, char const* filepath)
 {
     GLuint shader = glCreateShader(shader_type);
-	if (shader == 0)
-	{
-		fputs("Can not create a shader.\n", stderr);
-		return 0;
-	}
+    if (shader == 0)
+    {
+        fputs("Can not create a shader.\n", stderr);
+        return 0;
+    }
 
     char* source = loader_load_filepath(filepath);
     if (source == NULL)
@@ -43,13 +43,13 @@ GLuint _shader_create_from_filepath(GLenum shader_type, char const* filepath)
 
     glCompileShader(shader);
 
-	GLint compile_status;
+    GLint compile_status;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &compile_status);
     if (compile_status != GL_TRUE)
     {
         GLsizei log_length = 0;
         GLchar message[1024];
-		char const* shader_type_str = _shader_type_str(shader_type);
+        char const* shader_type_str = _shader_type_str(shader_type);
         glGetShaderInfoLog(shader, 1024, &log_length, message);
         fprintf(stderr, "Could not compile %s shader '%s': %s\n", shader_type_str, filepath, message);
         glDeleteShader(shader);
@@ -62,10 +62,10 @@ GLuint _shader_create_from_filepath(GLenum shader_type, char const* filepath)
 // Create GL program linking a vertex and a fragment shader
 GLuint _shader_create_program(GLuint vertex_shader, GLuint fragment_shader)
 {
-	GLuint program = glCreateProgram();
+    GLuint program = glCreateProgram();
     if (program == 0)
     {
-		fputs("Can not create GL program.\n", stderr);
+        fputs("Can not create GL program.\n", stderr);
         return 0;
     }
 
@@ -74,7 +74,7 @@ GLuint _shader_create_program(GLuint vertex_shader, GLuint fragment_shader)
 
     glLinkProgram(program);
 
-	GLint link_status;
+    GLint link_status;
     glGetProgramiv(program, GL_LINK_STATUS, &link_status);
     if (link_status != GL_TRUE)
     {
@@ -92,20 +92,20 @@ GLuint _shader_create_program(GLuint vertex_shader, GLuint fragment_shader)
 // Create default GL program
 GLuint shader_create()
 {
-	GLuint vertex_shader = _shader_create_from_filepath(GL_VERTEX_SHADER, "res/vertex_shader.vs");
+    GLuint vertex_shader = _shader_create_from_filepath(GL_VERTEX_SHADER, "res/vertex_shader.vs");
     if (vertex_shader == 0)
     {
         return 0;
     }
 
-	GLuint fragment_shader = _shader_create_from_filepath(GL_FRAGMENT_SHADER, "res/fragment_shader.fs");
+    GLuint fragment_shader = _shader_create_from_filepath(GL_FRAGMENT_SHADER, "res/fragment_shader.fs");
     if (fragment_shader == 0)
     {
         glDeleteShader(vertex_shader);
         return 0;
     }
 
-	GLuint program = _shader_create_program(vertex_shader, fragment_shader);
+    GLuint program = _shader_create_program(vertex_shader, fragment_shader);
 
     // Regardless of program linking correctly or not, shaders can be marked for deletion
     glDeleteShader(vertex_shader);

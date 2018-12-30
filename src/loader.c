@@ -11,8 +11,8 @@ char* _loader_load_file(char const* path, FILE* file)
     if (fseek(file, 0L, SEEK_END) != 0)
     {
         errno_t error_number = errno;
-		char error_str[100];
-		strerror_s(error_str, 99, error_number);
+        char error_str[100];
+        strerror_s(error_str, 99, error_number);
         fprintf(stderr, "Can not reach end of file '%s'. %i: %s\n", 
                         path, error_number, error_str);
         return NULL;
@@ -22,8 +22,8 @@ char* _loader_load_file(char const* path, FILE* file)
     if (file_size < 0L)
     {
         errno_t error_number = errno;
-		char error_str[100];
-		strerror_s(error_str, 99, error_number);
+        char error_str[100];
+        strerror_s(error_str, 99, error_number);
         fprintf(stderr, "Can not tell file size '%s'. %i: %s\n",
                         path, error_number, error_str);
         return NULL;
@@ -32,8 +32,8 @@ char* _loader_load_file(char const* path, FILE* file)
     if (fseek(file, 0L, SEEK_SET) != 0)
     {
         errno_t error_number = errno;
-		char error_str[100];
-		strerror_s(error_str, 99, error_number);
+        char error_str[100];
+        strerror_s(error_str, 99, error_number);
         fprintf(stderr, "Can not reach start of file '%s'. %i: %s\n", 
                         path, error_number, error_str);
         return NULL;
@@ -43,8 +43,8 @@ char* _loader_load_file(char const* path, FILE* file)
     if (file_content == NULL)
     {
         errno_t error_number = errno;
-		char error_str[100];
-		strerror_s(error_str, 99, error_number);
+        char error_str[100];
+        strerror_s(error_str, 99, error_number);
         fprintf(stderr, "Can not allocate memory to read file '%s' with size %li. %i: %s\n", 
                         path, file_size, error_number, error_str);
         return NULL;
@@ -68,12 +68,12 @@ char* _loader_load_file(char const* path, FILE* file)
 // Load contents of file into memory as single string
 char* loader_load_filepath(char const* path)
 {
-	FILE* file;
+    FILE* file;
     errno_t fopen_error_number = fopen_s(&file, path, "rb");
     if (fopen_error_number)
     {
-		char error_str[100];
-		strerror_s(error_str, 99, fopen_error_number);
+        char error_str[100];
+        strerror_s(error_str, 99, fopen_error_number);
         fprintf(stderr, "Can not open file '%s'. %i: %s\n", 
                         path, fopen_error_number, error_str);
         return NULL;
@@ -84,9 +84,9 @@ char* loader_load_filepath(char const* path)
     int close_status = fclose(file);
     if (close_status != 0)
     {
-		errno_t error_number = errno;
-		char error_str[100];
-		strerror_s(error_str, 99, error_number);
+        errno_t error_number = errno;
+        char error_str[100];
+        strerror_s(error_str, 99, error_number);
         fprintf(stderr, "Can not close file '%s' (ignoring). %i: %s\n",
                         path, error_number, error_str);
     }

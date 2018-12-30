@@ -1,4 +1,6 @@
 #pragma once
 
-GLFWwindow *init(void);
+#include <GLFW/glfw3.h>
+
+GLFWwindow* init(void);
 

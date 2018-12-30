@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <windows.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -9,16 +10,14 @@
 
 int main(void)
 {
-    GLuint program;
-    GLFWwindow *window;
-
-    window = init();
+	GLFWwindow* window = init();
     if (window == NULL)
     {
+		fflush(stderr);
         return EXIT_FAILURE;
     }
 
-    program = shader_create();
+	GLuint program = shader_create();
     if (program == 0)
     {
         glfwDestroyWindow(window);

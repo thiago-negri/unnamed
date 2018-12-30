@@ -1,1 +1,6 @@
 unnamed
+obj
+bin
+*.sln
+*.vcxproj
+*.vcxproj.filters

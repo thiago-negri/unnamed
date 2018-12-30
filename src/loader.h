@@ -1,4 +1,4 @@
 #pragma once
 
-char *loader_load_filepath(const char *path);
+char* loader_load_filepath(char const* path);
 

@@ -24,20 +24,20 @@ char const* _shader_type_str(GLenum shader_type)
 GLuint _shader_create_from_filepath(GLenum shader_type, char const* filepath)
 {
     GLuint shader = glCreateShader(shader_type);
-    if (shader == 0)
+    if (!shader)
     {
         fputs("Can not create a shader.\n", stderr);
         return 0;
     }
 
     char* source = loader_load_filepath(filepath);
-    if (source == NULL)
+    if (!source)
     {
         glDeleteShader(shader);
         return 0;
     }
 
-    glShaderSource(shader, 1, (GLchar const **) &source, NULL);
+    glShaderSource(shader, 1, (GLchar const **) &source, 0);
 
     free(source);
 
@@ -63,7 +63,7 @@ GLuint _shader_create_from_filepath(GLenum shader_type, char const* filepath)
 GLuint _shader_create_program(GLuint vertex_shader, GLuint fragment_shader)
 {
     GLuint program = glCreateProgram();
-    if (program == 0)
+    if (!program)
     {
         fputs("Can not create GL program.\n", stderr);
         return 0;
@@ -93,13 +93,13 @@ GLuint _shader_create_program(GLuint vertex_shader, GLuint fragment_shader)
 GLuint shader_create()
 {
     GLuint vertex_shader = _shader_create_from_filepath(GL_VERTEX_SHADER, "res/vertex_shader.vs");
-    if (vertex_shader == 0)
+    if (!vertex_shader)
     {
         return 0;
     }
 
     GLuint fragment_shader = _shader_create_from_filepath(GL_FRAGMENT_SHADER, "res/fragment_shader.fs");
-    if (fragment_shader == 0)
+    if (!fragment_shader)
     {
         glDeleteShader(vertex_shader);
         return 0;

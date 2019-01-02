@@ -17,7 +17,7 @@ GLFWwindow* init(void)
     if (glfwInit() != GLFW_TRUE)
     {
         fputs("Could not initialize GLFW.\n", stderr);
-        return NULL;
+        return 0;
     }
 
     int glfw_major, glfw_minor, glfw_revision;
@@ -26,12 +26,12 @@ GLFWwindow* init(void)
                     glfw_major, glfw_minor, glfw_revision, 
                     GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
 
-    GLFWwindow* window = glfwCreateWindow(width, height, title, NULL, NULL);
-    if (window == NULL)
+    GLFWwindow* window = glfwCreateWindow(width, height, title, 0, 0);
+    if (!window)
     {
         fputs("Could not open window.\n", stderr);
         glfwTerminate();
-        return NULL;
+        return 0;
     }
 
     glfwMakeContextCurrent(window);
@@ -41,7 +41,7 @@ GLFWwindow* init(void)
     {
         fputs("Could not initialize GLEW.\n", stderr);
         glfwTerminate();
-        return NULL;
+        return 0;
     }
 
     GLubyte const* gl_version = glGetString(GL_VERSION);

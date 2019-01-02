@@ -11,13 +11,13 @@
 int main(void)
 {
     GLFWwindow* window = init();
-    if (window == NULL)
+    if (!window)
     {
         return EXIT_FAILURE;
     }
 
     GLuint program = shader_create();
-    if (program == 0)
+    if (!program)
     {
         glfwDestroyWindow(window);
         glfwTerminate();

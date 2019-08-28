@@ -5,6 +5,7 @@
 
 #include "init.h"
 #include "glfw_callbacks.h"
+#include "log.h"
 
 static int const width = 640;
 static int const height = 480;

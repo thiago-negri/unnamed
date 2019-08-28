@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "loader.h"
+#include "log.h"
 
 // Load contents of file into memory as a single string, path argument is used just for printing error messages
 loader_file_data_t _loader_load_file(char const* path, FILE* file)

@@ -3,8 +3,8 @@
 #include <GL/glew.h>
 
 #include "shader.h"
-
 #include "loader.h"
+#include "log.h"
 
 // Convert shader type to string (human readable) representation
 char const* _shader_type_str(GLenum shader_type)

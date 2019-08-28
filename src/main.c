@@ -8,12 +8,19 @@
 #include "init.h"
 #include "shader.h"
 #include "graphics.h"
+#include "log.h"
 
 int main(int argc, char** argv)
 {
+    if (log_start())
+    {
+        return EXIT_FAILURE;
+    }
+
     GLFWwindow* window = init();
     if (!window)
     {
+        log_end();
         return EXIT_FAILURE;
     }
 
@@ -22,6 +29,7 @@ int main(int argc, char** argv)
     {
         glfwDestroyWindow(window);
         glfwTerminate();
+        log_end();
         return EXIT_FAILURE;
     }
 
@@ -33,13 +41,14 @@ int main(int argc, char** argv)
         shader_destroy(shader);
         glfwDestroyWindow(window);
         glfwTerminate();
+        log_end();
         return EXIT_FAILURE;
     }
 
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
-        graphics_draw(shader, (graphics_data_t) { 0 }, -0.5f, -0.5f);
+        graphics_draw(shader, texture, 0.0f, 0.0f);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -51,5 +60,6 @@ int main(int argc, char** argv)
     shader_destroy(shader);
     glfwDestroyWindow(window);
     glfwTerminate();
+    log_end();
     return EXIT_SUCCESS;
 }

@@ -11,13 +11,14 @@ static GLuint default_vbo_id;
 
 void graphics_init()
 {
-    GLfloat data[12] = {
-        -0.5f, -0.5f, // bottom left
-        -0.5f,  0.5f, // top left
-         0.5f,  0.5f, // top right
-         0.5f, -0.5f, // bottom right
-        -0.5f, -0.5f, // bottom left
-         0.5f,  0.5f, // top right
+    GLfloat data[] = {
+        // positions      // uv coordinates
+        -0.5f, -0.5f,     0.0f, 0.0f,         // bottom left
+        -0.5f,  0.5f,     0.0f, 1.0f,         // top left
+         0.5f,  0.5f,     1.0f, 1.0f,         // top right
+         0.5f, -0.5f,     1.0f, 0.0f,         // bottom right
+        -0.5f, -0.5f,     0.0f, 0.0f,         // bottom left
+         0.5f,  0.5f,     1.0f, 1.0f          // top right
     };
 
     glGenVertexArrays(1, &default_vao_id);
@@ -25,9 +26,18 @@ void graphics_init()
 
     glGenBuffers(1, &default_vbo_id);
     glBindBuffer(GL_ARRAY_BUFFER, default_vbo_id);
-    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(GLfloat), &data, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), &data, GL_STATIC_DRAW);
+
+    // size of a vertex
+    GLsizei stride = 4 * sizeof(GLfloat);
+
+    // 1st attribute, 2 floats for position
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid const*) 0);
     glEnableVertexAttribArray(0);
+
+    // 2nd attribute, 2 floats for uv coordinates
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid const*) (2 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -55,6 +65,8 @@ graphics_data_t graphics_load(unsigned char const* filepath, size_t width, size_
     glBindTexture(GL_TEXTURE_2D, texture_id);
     glTexStorage2D(GL_TEXTURE_2D, 1, GL_RGB8, width, height);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, image.content);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
     loader_unload(image);
 
@@ -70,11 +82,14 @@ void graphics_draw(shader_data_t shader, graphics_data_t graphics_data, GLfloat 
 {
     glUseProgram(shader.program_id);
     glUniform2f(shader.uniform_position, x, y);
-    // TODO Bind texture to shader
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, graphics_data.texture_id);
 
     glBindVertexArray(default_vao_id);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-    
+
+	glBindTexture(GL_TEXTURE_2D, 0);
     glBindVertexArray(0);
     glUseProgram(0);
 }

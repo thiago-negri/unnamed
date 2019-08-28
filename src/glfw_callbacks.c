@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "glfw_callbacks.h"
+#include "log.h"
 
 void glfw_callback_error(int error, char const* description)
 {

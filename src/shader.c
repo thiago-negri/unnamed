@@ -108,6 +108,8 @@ shader_data_t shader_create()
     GLuint program = _shader_create_program(vertex_shader, fragment_shader);
 
     GLint uniform_position = glGetUniformLocation(program, "un_Position");
+    GLint uniform_window_width = glGetUniformLocation(program, "un_WindowWidth");
+    GLint uniform_window_height = glGetUniformLocation(program, "un_WindowHeight");
 
     // Regardless of program linking correctly or not, shaders can be marked for deletion
     glDeleteShader(vertex_shader);
@@ -115,7 +117,9 @@ shader_data_t shader_create()
 
     return (shader_data_t) {
         .program_id = program,
-        .uniform_position = uniform_position
+        .uniform_position = uniform_position,
+        .uniform_window_width = uniform_window_width,
+        .uniform_window_height = uniform_window_height
     };
 }
 

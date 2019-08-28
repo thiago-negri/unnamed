@@ -5,20 +5,21 @@
 #include "loader.h"
 #include "shader.h"
 #include "graphics.h"
+#include "window.h"
 
 static GLuint default_vao_id;
 static GLuint default_vbo_id;
 
-void graphics_init()
+void graphics_start()
 {
     GLfloat data[] = {
         // positions      // uv coordinates
-        -0.5f, -0.5f,     0.0f, 0.0f,         // bottom left
-        -0.5f,  0.5f,     0.0f, 1.0f,         // top left
-         0.5f,  0.5f,     1.0f, 1.0f,         // top right
-         0.5f, -0.5f,     1.0f, 0.0f,         // bottom right
-        -0.5f, -0.5f,     0.0f, 0.0f,         // bottom left
-         0.5f,  0.5f,     1.0f, 1.0f          // top right
+        -1.0f, -1.0f,     0.0f, 0.0f,         // bottom left
+        -1.0f,  1.0f,     0.0f, 1.0f,         // top left
+         1.0f,  1.0f,     1.0f, 1.0f,         // top right
+         1.0f, -1.0f,     1.0f, 0.0f,         // bottom right
+        -1.0f, -1.0f,     0.0f, 0.0f,         // bottom left
+         1.0f,  1.0f,     1.0f, 1.0f          // top right
     };
 
     glGenVertexArrays(1, &default_vao_id);
@@ -28,7 +29,7 @@ void graphics_init()
     glBindBuffer(GL_ARRAY_BUFFER, default_vbo_id);
     glBufferData(GL_ARRAY_BUFFER, sizeof(data), &data, GL_STATIC_DRAW);
 
-    // size of a vertex
+    // full size of a single vertex data (2 floats for position + 2 floats for uv coordinates)
     GLsizei stride = 4 * sizeof(GLfloat);
 
     // 1st attribute, 2 floats for position
@@ -78,10 +79,12 @@ void graphics_unload(graphics_data_t graphics_data)
     glDeleteTextures(1, &graphics_data.texture_id);
 }
 
-void graphics_draw(shader_data_t shader, graphics_data_t graphics_data, GLfloat x, GLfloat y)
+void graphics_draw(window_data_t const* window, shader_data_t shader, graphics_data_t graphics_data, GLfloat x, GLfloat y)
 {
     glUseProgram(shader.program_id);
     glUniform2f(shader.uniform_position, x, y);
+    glUniform1i(shader.uniform_window_width, window->width);
+    glUniform1i(shader.uniform_window_height, window->height);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, graphics_data.texture_id);

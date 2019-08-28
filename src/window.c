@@ -1,17 +1,12 @@
-#include <stdio.h>
-
+#include <stdlib.h>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "init.h"
-#include "glfw_callbacks.h"
+#include "window.h"
 #include "log.h"
+#include "glfw_callbacks.h"
 
-static int const width = 640;
-static int const height = 480;
-static char const* const title = "Unnamed";
-
-GLFWwindow* init(void)
+window_data_t* window_start(char const* title, int width, int height)
 {
     glfwSetErrorCallback(glfw_callback_error);
 
@@ -51,7 +46,22 @@ GLFWwindow* init(void)
     glfwSwapInterval(1);
 
     glfwSetKeyCallback(window, glfw_callback_key);
+    glfwSetWindowSizeCallback(window, glfw_callback_size);
 
-    return window;
+    window_data_t* data = malloc(sizeof(window_data_t));
+    data->title = title;
+    data->width = width;
+    data->height = height;
+    data->glfw_window = window;
+
+    glfwSetWindowUserPointer(window, data);
+
+    return data;
 }
 
+void window_end(window_data_t* window)
+{
+    glfwDestroyWindow(window->glfw_window);
+    glfwTerminate();
+    free(window);
+}

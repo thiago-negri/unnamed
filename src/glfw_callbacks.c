@@ -4,7 +4,7 @@
 
 void glfw_callback_error(int error, char const* description)
 {
-    fprintf(stderr, "GLFW error %i: %s\n", error, description);
+    log_error("GLFW error %i: %s\n", error, description);
 }
 
 void glfw_callback_key(GLFWwindow* window, int key, int scancode, int action, int mods)

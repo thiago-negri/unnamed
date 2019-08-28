@@ -16,20 +16,20 @@ GLFWwindow* init(void)
 
     if (glfwInit() != GLFW_TRUE)
     {
-        fputs("Could not initialize GLFW.\n", stderr);
+        log_error("Could not initialize GLFW.\n");
         return 0;
     }
 
     int glfw_major, glfw_minor, glfw_revision;
     glfwGetVersion(&glfw_major, &glfw_minor, &glfw_revision);
-    fprintf(stdout, "GLFW %i.%i.%i (compiled with %i.%i.%i)\n", 
-                    glfw_major, glfw_minor, glfw_revision, 
-                    GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
+    log_info("GLFW %i.%i.%i (compiled with %i.%i.%i)\n",
+        glfw_major, glfw_minor, glfw_revision,
+        GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
 
     GLFWwindow* window = glfwCreateWindow(width, height, title, 0, 0);
     if (!window)
     {
-        fputs("Could not open window.\n", stderr);
+        log_error("Could not open window.\n");
         glfwTerminate();
         return 0;
     }
@@ -39,13 +39,13 @@ GLFWwindow* init(void)
     GLenum glew_init_result = glewInit();
     if (glew_init_result)
     {
-        fputs("Could not initialize GLEW.\n", stderr);
+        log_error("Could not initialize GLEW.\n");
         glfwTerminate();
         return 0;
     }
 
     GLubyte const* gl_version = glGetString(GL_VERSION);
-    fprintf(stdout, "OpenGL %s\n", gl_version);
+    log_info("OpenGL %s\n", gl_version);
 
     glfwSwapInterval(1);
 

@@ -7,8 +7,9 @@
 
 #include "init.h"
 #include "shader.h"
+#include "graphics.h"
 
-int main(void)
+int main(int argc, char** argv)
 {
     GLFWwindow* window = init();
     if (!window)
@@ -16,24 +17,38 @@ int main(void)
         return EXIT_FAILURE;
     }
 
-    GLuint program = shader_create();
-    if (!program)
+    shader_data_t shader = shader_create();
+    if (!shader.program_id)
     {
         glfwDestroyWindow(window);
         glfwTerminate();
         return EXIT_FAILURE;
     }
 
-    glUseProgram(program);
+    graphics_init();
+
+    graphics_data_t texture = graphics_load("res/image.bmp", 64, 64);
+    if (!texture.texture_id)
+    {
+        shader_destroy(shader);
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return EXIT_FAILURE;
+    }
 
     while (!glfwWindowShouldClose(window))
     {
         glClear(GL_COLOR_BUFFER_BIT);
+        graphics_draw(shader, (graphics_data_t) { 0 }, -0.5f, -0.5f);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    glDeleteProgram(program);
+    graphics_unload(texture);
+
+    graphics_end();
+
+    shader_destroy(shader);
     glfwDestroyWindow(window);
     glfwTerminate();
     return EXIT_SUCCESS;

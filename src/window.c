@@ -49,6 +49,16 @@ window_data_t* window_start(char const* title, int width, int height)
     glfwSetWindowSizeCallback(window, glfw_callback_size);
 
     window_data_t* data = malloc(sizeof(window_data_t));
+    if (!data)
+    {
+        errno_t error_number = errno;
+        char error_str[100];
+        strerror_s(error_str, 99, error_number);
+        log_error("Can not allocate memory to window_data_t. %i: %s\n", error_number, error_str);
+        glfwTerminate();
+        return 0;
+    }
+
     data->title = title;
     data->width = width;
     data->height = height;

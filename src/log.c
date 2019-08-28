@@ -3,23 +3,23 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-FILE* log_fd;
+static FILE* log_fd;
 
 int log_start()
 {
-	log_fd = fopen("log.txt", "w");
-	if (!log_fd)
-	{
-		fprintf(stderr, "Could not open log file.\n");
-		return 1;
-	}
-	return 0;
+    log_fd = fopen("log.txt", "w");
+    if (!log_fd)
+    {
+        fprintf(stderr, "Could not open log file.\n");
+        return 1;
+    }
+    return 0;
 }
 
 void log_end()
 {
-	fclose(log_fd);
-	log_fd = 0;
+    fclose(log_fd);
+    log_fd = 0;
 }
 
 void log_info(char const* format, ...)
